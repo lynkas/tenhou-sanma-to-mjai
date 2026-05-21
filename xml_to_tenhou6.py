@@ -523,17 +523,9 @@ def parse_ryuukyoku(attrs: str) -> list:
     if sc_match:
         sc = [int(x) for x in sc_match.group(1).split(',')]
         deltas = [sc[i*2+1] * 100 for i in range(4)]
+        return ['流局', deltas]
     else:
-        deltas = [0, 0, 0, 0]
-    
-    # Check for special ryuukyoku types
-    type_match = re.search(r'type="([^"]*)"', attrs)
-    if type_match:
-        rtype = type_match.group(1)
-    else:
-        rtype = "流局"
-    
-    return ['流局', deltas]
+        return ['流局']
 
 
 def convert_xml_to_tenhou6(xml_content: str) -> dict:

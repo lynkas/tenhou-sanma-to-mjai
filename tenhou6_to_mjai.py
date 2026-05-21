@@ -385,8 +385,11 @@ def convert_kyoku(kyoku_data, names, kyoku_idx):
                 else:
                     break
         elif result_type in ("流局", "流し満貫"):
-            deltas = [int(x) for x in result_data[1][:3]] if len(result_data) > 1 and isinstance(result_data[1], list) else [0, 0, 0]
-            events.append({"type": "ryukyoku", "deltas": deltas})
+            deltas = [int(x) for x in result_data[1][:3]] if len(result_data) > 1 and isinstance(result_data[1], list) else None
+            if deltas and any(d != 0 for d in deltas):
+                events.append({"type": "ryukyoku", "deltas": deltas})
+            else:
+                events.append({"type": "ryukyoku"})
         # 九種九牌, 全員聴牌, 全員不聴 etc. — no deltas
         elif result_type in ("九種九牌", "全員聴牌", "全員不聴", "三家和了"):
             events.append({"type": "ryukyoku"})
