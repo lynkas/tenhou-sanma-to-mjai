@@ -250,14 +250,20 @@ def convert_kyoku(kyoku_data, names, kyoku_idx):
                         # After naki, 60 means discard the called tile? Shouldn't happen
                         break
                 elif dahai_raw == 0:
-                    # Nukidora from hand (not from tsumo)
-                    events.append({
-                        "type": "nukidora",
-                        "actor": p,
-                        "pai": "N",
-                    })
-                    # After nukidora, same player draws rinshan
-                    continue
+                    # 0 after daiminkan = placeholder (no discard needed, rinshan follows)
+                    # 0 otherwise = nukidora from hand
+                    if last_tsumo_tile[p] is None:
+                        # After naki (daiminkan), 0 is a placeholder — skip, same player continues
+                        continue
+                    else:
+                        # Nukidora from hand (not from tsumo)
+                        events.append({
+                            "type": "nukidora",
+                            "actor": p,
+                            "pai": "N",
+                        })
+                        # After nukidora, same player draws rinshan
+                        continue
                 else:
                     # Tedashi (hand-pick discard)
                     events.append({
